@@ -1,0 +1,14 @@
+# Configuration locale et secrets
+config.local.php
+# Données exportées (contiennent des comptes)
+database/vyro-export.sql
+# Fichiers envoyés par l'admin
+uploads/products/*
+uploads/posts/*
+!uploads/products/.gitkeep
+!uploads/posts/.gitkeep
+# Divers
+*.log
+.claude/
+.git
+DEPLOIEMENT.md

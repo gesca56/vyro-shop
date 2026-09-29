@@ -1,0 +1,11 @@
+# MariaDB intégrée (mode démo) : faible consommation mémoire
+[mysqld]
+bind-address = 127.0.0.1
+skip-name-resolve
+performance_schema = OFF
+innodb_buffer_pool_size = 32M
+innodb_log_buffer_size = 4M
+key_buffer_size = 4M
+max_connections = 30
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci

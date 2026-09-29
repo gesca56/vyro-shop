@@ -1,0 +1,8 @@
+Options -Indexes
+<Files "install.php">
+    # Décommentez après installation en production :
+    # Require all denied
+</Files>
+<Files "config.local.php">
+    Require all denied
+</Files>

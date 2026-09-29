@@ -1,0 +1,36 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# Render > New > Blueprint > choisir ce dépôt : tout est créé automatiquement.
+services:
+  - type: web
+    name: vyro
+    runtime: docker
+    plan: free
+    region: frankfurt          # région Render la plus proche d'Abidjan
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: APP_SECRET
+        generateValue: true
+      - key: ADMIN_EMAIL
+        sync: false            # votre email de connexion à /admin
+      - key: ADMIN_PASSWORD
+        sync: false            # votre mot de passe admin
+      # Base MySQL externe (Aiven, TiDB…). Laisser DB_HOST vide = base intégrée de démo (non persistante)
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: "3306"
+      - key: DB_NAME
+        value: vyro
+      - key: DB_USER
+        sync: false
+      - key: DB_PASS
+        sync: false
+      - key: DB_SSL
+        value: "0"
+      # Wave Business (optionnel)
+      - key: WAVE_API_KEY
+        sync: false
+      - key: WAVE_WEBHOOK_SECRET
+        sync: false

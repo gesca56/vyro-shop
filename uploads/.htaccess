@@ -1,0 +1,5 @@
+# Aucune exécution de script dans les uploads
+<FilesMatch "\.(php|phtml|phar|php\d)$">
+    Require all denied
+</FilesMatch>
+Options -Indexes
