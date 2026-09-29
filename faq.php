@@ -7,7 +7,7 @@ $faq = [
     'Quels sont les délais de livraison ?' =>
         'Abidjan : 24 à 48h (' . price(SHIPPING_FEE) . '). Intérieur de la Côte d\'Ivoire : 2 à 5 jours ouvrés (' . price(SHIPPING_FEE_OTHER) . '). La livraison est offerte dès ' . price(FREE_SHIPPING_THRESHOLD) . ' d\'achat. Vous pouvez aussi retirer votre commande en point relais.',
     'Quels moyens de paiement acceptez-vous ?' =>
-        'Wave, Orange Money, MTN MoMo, Moov Money (au ' . PAYMENT_PHONE . ') et paiement à la livraison (espèces ou Mobile Money remis au livreur).',
+        'Le paiement se fait uniquement par Wave : directement dans l’application Wave, ou par transfert Wave au ' . PAYMENT_PHONE . '. Ta commande est confirmée dès réception du paiement.',
     'Comment choisir ma taille ?' =>
         'Chaque fiche produit dispose d\'un guide des tailles détaillé. Nos coupes oversized taillent large : pour un rendu plus ajusté, prenez une taille en dessous. En cas de doute, écrivez-nous sur WhatsApp avec votre taille et votre poids, nous vous conseillons.',
     'Puis-je retourner un article ?' =>

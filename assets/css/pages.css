@@ -1,0 +1,97 @@
+/* =========================================================
+   VYRO — Transition entre les pages & pages de découverte
+   ========================================================= */
+
+/* ---------- Rideau noir + couronne ---------- */
+.page-curtain { display: none; }
+html.js .page-curtain {
+    position: fixed; inset: 0; z-index: 400; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+    background: #000; color: #fff; pointer-events: none;
+    /* Arrivée sur une page : le rideau se lève tout seul (aucun JavaScript requis) */
+    animation: curtainOut .75s .12s cubic-bezier(.76, 0, .24, 1) both;
+}
+.page-curtain img { width: 64px; height: auto; filter: drop-shadow(0 0 18px rgba(255, 255, 255, .35)); animation: crownOut .4s both; }
+.page-curtain span { font-family: var(--display); font-weight: 800; font-size: 14px; letter-spacing: .5em; padding-left: .5em; color: #bdbdbd; animation: crownOut .4s both; }
+.page-curtain i { width: 120px; height: 1px; background: #333; position: relative; overflow: hidden; }
+.page-curtain i::after { content: ''; position: absolute; inset: 0; background: #fff; transform: scaleX(0); transform-origin: left; }
+html.js .page-curtain.is-in { animation: curtainIn .42s cubic-bezier(.76, 0, .24, 1) both; pointer-events: auto; }
+.page-curtain.is-in img, .page-curtain.is-in span { animation: crownIn .35s .15s both; }
+.page-curtain.is-in i::after { animation: loadLine 1.2s .2s ease-in-out infinite; }
+html.js .page-curtain.is-out { animation: curtainOut .6s cubic-bezier(.76, 0, .24, 1) both; }
+@keyframes curtainOut { from { transform: translateY(0); } to { transform: translateY(-100%); visibility: hidden; } }
+@keyframes curtainIn { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes crownIn { from { opacity: 0; transform: translateY(12px) scale(.9); } }
+@keyframes crownOut { to { opacity: 0; transform: translateY(-10px); } }
+@keyframes loadLine { 0% { transform: scaleX(0); } 60% { transform: scaleX(1); } 100% { transform: scaleX(1); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { html.js .page-curtain { display: none; } }
+
+/* ---------- Accueil : « Explorer VYRO » ---------- */
+.explore-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.explore-tile { position: relative; display: block; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-lg); background: #000; transition: transform .35s cubic-bezier(.2, .7, .2, 1), border-color .35s; }
+.explore-tile img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; transition: transform .7s cubic-bezier(.2, .7, .2, 1), filter .5s; }
+.explore-tile:hover { transform: translateY(-4px); border-color: var(--line-2); }
+.explore-tile:hover img { transform: scale(1.06); filter: brightness(1.15); }
+.explore-body { position: absolute; inset: auto 0 0 0; padding: 16px; background: linear-gradient(transparent, rgba(0, 0, 0, .9) 50%); }
+.explore-body .kicker { margin-bottom: 4px; color: #b5b5b5; }
+.explore-body h3 { font-family: var(--display); font-weight: 800; font-size: clamp(22px, 5vw, 34px); text-transform: uppercase; margin: 0; line-height: 1; }
+.explore-body p { margin: 6px 0 0; font-size: 13px; color: #cfcfcf; }
+.community-strip { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; padding: 18px 20px; border: 1px solid var(--line); border-radius: var(--radius-lg); font-size: 14px; transition: border-color .25s, background .25s; }
+.community-strip:hover { border-color: var(--ink); background: var(--soft); }
+
+/* ---------- Collections ---------- */
+.collections-page { display: grid; gap: 56px; padding-bottom: 64px; }
+.collection-block { display: grid; gap: 18px; }
+.collection-banner { display: grid; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--soft); transition: border-color .3s; }
+.collection-banner:hover { border-color: var(--line-2); }
+.collection-banner-media { overflow: hidden; background: #000; }
+.collection-banner-media img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; transition: transform .8s cubic-bezier(.2, .7, .2, 1); }
+.collection-banner:hover img { transform: scale(1.05); }
+.collection-banner-body { padding: 22px 20px 26px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; justify-content: center; }
+.collection-banner-body h3 { font-family: var(--display); font-weight: 800; font-size: clamp(36px, 8vw, 72px); line-height: .9; text-transform: uppercase; margin: 0; }
+.collection-banner-body p { color: var(--muted); margin: 0 0 8px; max-width: 42ch; }
+
+/* ---------- Avis clients ---------- */
+.rating-summary { display: grid; gap: 24px; align-items: center; padding: 24px; border: 1px solid var(--line); border-radius: var(--radius-lg); margin-bottom: 28px; }
+.rating-big { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.rating-big strong { font-family: var(--display); font-weight: 800; font-size: 72px; line-height: .9; }
+.rating-bars { display: grid; gap: 8px; }
+.rating-bar { display: grid; grid-template-columns: 34px 1fr 28px; align-items: center; gap: 10px; font-size: 13px; font-variant-numeric: tabular-nums; }
+.rating-bar i { height: 4px; border-radius: 2px; background: var(--soft-2); overflow: hidden; }
+.rating-bar b { display: block; height: 100%; background: var(--ink); border-radius: 2px; }
+.reviews-wall { columns: 1; column-gap: 12px; }
+.reviews-wall .review-card { break-inside: avoid; margin-bottom: 12px; animation: cardIn .55s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(var(--i, 0) * 45ms); }
+.review-product { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.review-product img { width: 40px; height: 50px; object-fit: cover; border-radius: var(--radius); background: #000; }
+.review-product:hover span { color: var(--ink); }
+.page-cta { text-align: center; padding: 56px 0 72px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.page-cta h2 { margin: 0; }
+
+/* ---------- Communauté ---------- */
+.social-cards { display: grid; gap: 10px; margin-bottom: 48px; }
+.social-card { display: grid; grid-template-columns: 44px 1fr; gap: 2px 14px; align-items: center; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius-lg); transition: border-color .25s, background .25s, transform .25s; }
+.social-card:hover { border-color: var(--ink); background: var(--soft); transform: translateY(-2px); }
+.social-card svg { grid-row: span 4; width: 36px; height: 36px; stroke-width: 1.4; }
+.social-card .kicker { margin: 0; }
+.social-card strong { font-family: var(--display); font-size: 24px; letter-spacing: .02em; }
+.social-card small { color: var(--muted); }
+.social-card .link-arrow { margin-top: 6px; font-size: 13px; }
+.looks-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+
+@media (min-width: 640px) {
+    .explore-grid { grid-template-columns: repeat(4, 1fr); }
+    .explore-tile img { aspect-ratio: 3 / 4; }
+    .rating-summary { grid-template-columns: auto 1fr; gap: 48px; padding: 32px; }
+    .reviews-wall { columns: 2; }
+    .social-cards { grid-template-columns: repeat(3, 1fr); }
+    .social-card { grid-template-columns: 1fr; }
+    .social-card svg { grid-row: auto; margin-bottom: 10px; }
+}
+@media (min-width: 1024px) {
+    .collection-banner { grid-template-columns: 1.3fr 1fr; }
+    .collection-banner.flip { grid-template-columns: 1fr 1.3fr; }
+    .collection-banner.flip .collection-banner-media { order: 2; }
+    .collection-banner-media img { height: 100%; aspect-ratio: auto; min-height: 380px; }
+    .collection-banner-body { padding: 44px; }
+    .reviews-wall { columns: 3; }
+    .looks-grid { grid-template-columns: repeat(6, 1fr); }
+}

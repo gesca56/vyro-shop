@@ -7,6 +7,7 @@
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const fmt = n => new Intl.NumberFormat('fr-FR').format(n).replace(/ | /g, ' ') + ' FCFA';
     const overlay = $('#overlay');
+    const curtain = $('#pageCurtain');
 
     /* ---------- Toast ---------- */
     function toast(msg, type = 'success') {
@@ -188,21 +189,23 @@
             swapTo(u.href);
             return;
         }
-        // Navigation vers une autre page : on nomme les éléments qui vont « se transformer »
-        if (u.origin !== location.origin) return;
-        $$('[style*="view-transition-name"]').forEach(el => el.style.viewTransitionName = '');
-        const tile = a.closest('[data-vt]');
-        if (tile) {
-            $$('.vt-title, .vt-media').forEach(el => el.style.viewTransitionName = 'none');
-            $('img', tile) && ($('img', tile).style.viewTransitionName = 'page-media');
-            $('h3, h2', tile) && ($('h3, h2', tile).style.viewTransitionName = 'page-title');
-        }
-        const card = a.closest('.card');
-        if (card) {
-            $('.card-media img', card).style.viewTransitionName = 'product-media';
+        // Navigation vers une autre page du site : rideau de transition, puis chargement
+        if (u.origin !== location.origin || a.hasAttribute('data-no-curtain')) return;
+        if (u.pathname === location.pathname && u.search === location.search && u.hash) return; // ancre sur la même page
+        if (reduced || !curtain) return;
+        e.preventDefault();
+        closeP();
+        curtain.classList.remove('is-out');
+        curtain.classList.add('is-in');
+        setTimeout(() => { location.href = u.href; }, 420);
+    });
+    // Retour arrière (cache du navigateur) : on retire le rideau
+    window.addEventListener('pageshow', ev => {
+        if (ev.persisted && curtain) {
+            curtain.classList.remove('is-in');
+            curtain.classList.add('is-out');
         }
     });
-    window.addEventListener('pageshow', () => $$('[style*="view-transition-name"]').forEach(el => el.style.viewTransitionName = ''));
 
     document.addEventListener('submit', e => {
         const f = e.target;

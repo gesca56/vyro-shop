@@ -100,9 +100,7 @@ require __DIR__ . '/includes/header.php';
                 <p class="muted small">Frais de livraison hors Abidjan : <?= price(SHIPPING_FEE_OTHER) ?>, calculés à l'étape suivante.</p>
                 <a href="<?= url('checkout.php') ?>" class="btn btn-accent btn-lg btn-block">PASSER À LA COMMANDE</a>
                 <a href="<?= url('shop.php') ?>" class="btn btn-ghost btn-block">Continuer mes achats</a>
-                <div class="pay-mini">
-                    <span style="--pc:#FF7900">Orange</span><span style="--pc:#FFCC00">MTN</span><span style="--pc:#0066B3">Moov</span><span style="--pc:#1DC8FF">Wave</span><span style="--pc:#6B6B6B">Livraison</span>
-                </div>
+                <div class="pay-mini"><span style="--pc:#1DC8FF">Paiement Wave</span></div>
             </aside>
         </div>
     <?php endif; ?>

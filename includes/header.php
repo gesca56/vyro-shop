@@ -38,14 +38,22 @@ $logoImg = '<img src="' . url('assets/img/logo-light.png') . '" srcset="' . url(
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= asset('css/style.css') ?>">
     <link rel="stylesheet" href="<?= asset('css/motion.css') ?>">
+    <link rel="stylesheet" href="<?= asset('css/pages.css') ?>">
 </head>
 <body class="page-<?= e(pathinfo($current, PATHINFO_FILENAME)) ?>">
+
+<!-- Transition entre les pages -->
+<div class="page-curtain" id="pageCurtain" aria-hidden="true">
+    <img src="<?= url('assets/img/crown-light.png') ?>" alt="" width="256" height="200">
+    <span>VYRO</span>
+    <i></i>
+</div>
 
 <div class="promo-bar" id="promoBar">
     <div class="promo-rotator" aria-live="polite">
         <span class="on">Livraison offerte dès <?= price(FREE_SHIPPING_THRESHOLD) ?> — Abidjan 24–48h</span>
         <?php if ($fp): ?><span><?= e($fp['label']) ?> · <?= e($fp['description']) ?> · Code <b><?= e($fp['code']) ?></b></span><?php endif; ?>
-        <span>Paiement Wave · Orange Money · MTN · Moov · À la livraison</span>
+        <span>Paiement 100 % Wave · Rapide et sécurisé</span>
         <span>Nouveau drop disponible</span>
     </div>
 </div>
@@ -74,6 +82,8 @@ $logoImg = '<img src="' . url('assets/img/logo-light.png') . '" srcset="' . url(
                                 <?php foreach ($navCollections as $c): ?>
                                     <a href="<?= url('shop.php?collection=' . $c['slug']) ?>"><?= e($c['name']) ?></a>
                                 <?php endforeach; ?>
+                                <a href="<?= url('shop.php?sort=best') ?>">Best-sellers</a>
+                                <a href="<?= url('avis.php') ?>">Avis clients</a>
                                 <a href="<?= url('shop.php?filter=promo') ?>" class="nav-promo">Promotions</a>
                                 <a href="<?= url('shop.php') ?>" class="mega-all">Tout voir →</a>
                             </div>
@@ -82,7 +92,7 @@ $logoImg = '<img src="' . url('assets/img/logo-light.png') . '" srcset="' . url(
                 </div>
                 <a href="<?= url('shop.php?filter=new') ?>" class="<?= $navFilter === 'new' ? 'active' : '' ?>">Nouveautés</a>
                 <a href="<?= url('blog.php') ?>" class="<?= in_array($current, ['blog.php', 'article.php'], true) ? 'active' : '' ?>">Journal</a>
-                <a href="<?= url('contact.php') ?>" class="<?= $current === 'contact.php' ? 'active' : '' ?>">Contact</a>
+                <a href="<?= url('collections.php') ?>" class="<?= $current === 'collections.php' ? 'active' : '' ?>">Collections</a>
             </nav>
         </div>
 
@@ -147,8 +157,12 @@ $logoImg = '<img src="' . url('assets/img/logo-light.png') . '" srcset="' . url(
         </div>
     <?php endforeach; ?>
     <a href="<?= url('shop.php?filter=new') ?>" class="<?= $navFilter === 'new' ? 'active' : '' ?>">Nouveautés</a>
+    <a href="<?= url('shop.php?sort=best') ?>">Best-sellers</a>
+    <a href="<?= url('collections.php') ?>" class="<?= $current === 'collections.php' ? 'active' : '' ?>">Collections</a>
     <a href="<?= url('shop.php?filter=promo') ?>" class="nav-promo <?= $navFilter === 'promo' ? 'active' : '' ?>">Promotions</a>
     <a href="<?= url('blog.php') ?>" class="<?= in_array($current, ['blog.php', 'article.php'], true) ? 'active' : '' ?>">Journal</a>
+    <a href="<?= url('avis.php') ?>" class="<?= $current === 'avis.php' ? 'active' : '' ?>">Avis clients</a>
+    <a href="<?= url('communaute.php') ?>" class="<?= $current === 'communaute.php' ? 'active' : '' ?>">Communauté</a>
     <div class="nav-extra">
         <a href="<?= url('account.php') ?>">Mon compte</a>
         <a href="<?= url('track.php') ?>">Suivre ma commande</a>

@@ -549,15 +549,14 @@ function payment_methods(): array
         'card' => ['label' => 'Carte bancaire', 'type' => 'card', 'color' => '#FFFFFF'],
         'cod' => ['label' => 'Paiement à la livraison', 'type' => 'cod', 'color' => '#6B6B6B'],
     ];
-    // Pas de passerelle carte branchée : on ne propose pas un paiement qui ne débiterait rien
-    if (!CARD_PAYMENT_ENABLED) unset($m['card']);
-    return $m;
+    // Seuls les moyens activés dans vyro-config.php (PAYMENT_METHODS) sont proposés au client
+    return array_intersect_key($m, array_flip(PAYMENT_METHODS));
 }
 
 /** Libellés connus (y compris moyens désactivés, pour l'historique des commandes) */
 function payment_label(string $m): string
 {
-    return payment_methods()[$m]['label'] ?? (['card' => 'Carte bancaire'][$m] ?? $m);
+    return payment_methods()[$m]['label'] ?? (['orange_money' => 'Orange Money', 'mtn_momo' => 'MTN MoMo', 'moov_money' => 'Moov Money', 'card' => 'Carte bancaire', 'cod' => 'Paiement à la livraison'][$m] ?? $m);
 }
 
 function payment_status_label(string $s): string

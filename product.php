@@ -179,7 +179,7 @@ require __DIR__ . '/includes/header.php';
 
             <ul class="perks">
                 <li>🚚 Livraison 24–48h à Abidjan — offerte dès <?= price(FREE_SHIPPING_THRESHOLD) ?></li>
-                <li>📱 Paiement Wave, Orange Money, MTN, Moov ou à la livraison</li>
+                <li>📱 Paiement 100 % Wave, rapide et sécurisé</li>
                 <li>↩️ Retours et échanges sous 7 jours</li>
             </ul>
 

@@ -1,19 +1,13 @@
 <?php
 require __DIR__ . '/vyro-config.php';
 
-$newProducts = products_query('p.is_new = 1', [], 'p.created_at DESC', 8);
-$bestSellers = products_query('1', [], 'p.sales_count DESC', 8);
-foreach ($bestSellers as &$b) $b['show_sales'] = true;
-unset($b);
-$musts = products_query('p.is_featured = 1', [], 'RAND()', 4);
-$collections = q('SELECT c.*, (SELECT COUNT(*) FROM products p WHERE p.collection_id = c.id AND p.is_active = 1) n FROM collections c ORDER BY sort_order')->fetchAll();
+$newProducts = products_query('p.is_new = 1', [], 'p.created_at DESC', 4);
 $homeTree = [];
 foreach (categories_tree() as $c) $homeTree[$c['slug']] = $c;
-$journal = q("SELECT * FROM posts WHERE status = 'published' AND published_at <= NOW() ORDER BY is_featured DESC, published_at DESC LIMIT 3")->fetchAll();
-$reviews = q('SELECT r.*, p.name product_name, p.slug product_slug FROM reviews r LEFT JOIN products p ON p.id = r.product_id
-              WHERE r.approved = 1 AND r.rating >= 4 ORDER BY r.created_at DESC LIMIT 8')->fetchAll();
 $stats = q('SELECT COUNT(*) n, AVG(rating) a FROM reviews WHERE approved = 1')->fetch();
 $happy = 2500 + (int)q("SELECT COUNT(*) FROM orders WHERE status = 'delivered'")->fetchColumn();
+$totalSold = (int)q('SELECT SUM(sales_count) FROM products WHERE is_active = 1')->fetchColumn();
+$nbCollections = (int)q('SELECT COUNT(*) FROM collections')->fetchColumn();
 $fp = featured_promo();
 
 $icoGlobe = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>';
@@ -67,7 +61,7 @@ require __DIR__ . '/includes/header.php';
 </section>
 <?php endif; ?>
 
-<!-- NOUVEAU DROP -->
+<!-- NOUVEAU DROP (aperçu) -->
 <section class="section" id="drop">
     <div class="container">
         <div class="section-head">
@@ -75,7 +69,7 @@ require __DIR__ . '/includes/header.php';
                 <span class="kicker">Just dropped</span>
                 <h2>Nouveau drop</h2>
             </div>
-            <a href="<?= url('shop.php?filter=new') ?>" class="link-arrow">Tout voir</a>
+            <a href="<?= url('shop.php?filter=new') ?>" class="link-arrow">Toutes les nouveautés</a>
         </div>
         <div class="product-grid scroll-x reveal">
             <?php foreach ($newProducts as $p) echo product_card($p); ?>
@@ -93,7 +87,6 @@ require __DIR__ . '/includes/header.php';
                 <a href="<?= url('shop.php?cat=' . $slug) ?>" class="cat-tile" data-vt style="--i:<?= $i ?>">
                     <img src="<?= visual_url($vis, $col) ?>" alt="<?= e($cat['name']) ?>" loading="lazy">
                     <div class="cat-tile-body">
-                        <span class="cat-index">0<?= $i + 1 ?></span>
                         <h3><?= e($cat['name']) ?></h3>
                         <p><?= e(implode(' · ', array_column($cat['children'], 'name'))) ?></p>
                         <span class="link-arrow">Découvrir</span>
@@ -113,146 +106,53 @@ require __DIR__ . '/includes/header.php';
     </div>
 </div>
 
-<!-- BEST SELLERS -->
+<!-- EXPLORER : chaque univers a sa page -->
 <section class="section">
     <div class="container">
         <div class="section-head">
             <div>
-                <span class="kicker">Best sellers</span>
-                <h2>Les plus demandés</h2>
-            </div>
-            <a href="<?= url('shop.php?sort=best') ?>" class="link-arrow">Tout voir</a>
-        </div>
-        <div class="product-grid scroll-x reveal">
-            <?php foreach ($bestSellers as $p) echo product_card($p); ?>
-        </div>
-    </div>
-</section>
-
-<!-- COLLECTIONS -->
-<section class="section section-alt">
-    <div class="container">
-        <div class="section-head">
-            <div>
-                <span class="kicker">Collections</span>
-                <h2>Tendances du moment</h2>
+                <span class="kicker">Explorer VYRO</span>
+                <h2>Continue la visite</h2>
             </div>
         </div>
-        <div class="collection-grid reveal">
-            <?php foreach ($collections as $c): [$vis, $col] = listing_visual($c['slug']) ?? ['tee', 'Noir']; ?>
-                <a href="<?= url('shop.php?collection=' . $c['slug']) ?>" class="collection-tile" data-vt>
-                    <img src="<?= visual_url($vis, $col) ?>" alt="" loading="lazy">
-                    <div class="collection-body">
-                        <h3><?= e($c['name']) ?></h3>
-                        <p><?= e($c['tagline']) ?></p>
-                        <span class="link-arrow"><?= (int)$c['n'] ?> pièces</span>
-                    </div>
-                </a>
-            <?php endforeach; ?>
+        <div class="explore-grid reveal">
+            <a href="<?= url('shop.php?sort=best') ?>" class="explore-tile" data-vt>
+                <img src="<?= visual_url('hoodie', 'Noir') ?>" alt="" loading="lazy">
+                <div class="explore-body">
+                    <span class="kicker">Les plus demandés</span>
+                    <h3>Best-sellers</h3>
+                    <p><?= number_format($totalSold, 0, ',', ' ') ?> pièces vendues</p>
+                </div>
+            </a>
+            <a href="<?= url('collections.php') ?>" class="explore-tile" data-vt>
+                <img src="<?= visual_url('pants', 'Kaki') ?>" alt="" loading="lazy">
+                <div class="explore-body">
+                    <span class="kicker"><?= $nbCollections ?> univers</span>
+                    <h3>Collections</h3>
+                    <p>New Drop, Essentials, Street, Summer</p>
+                </div>
+            </a>
+            <a href="<?= url('avis.php') ?>" class="explore-tile" data-vt>
+                <img src="<?= visual_url('sneaker', 'Blanc') ?>" alt="" loading="lazy">
+                <div class="explore-body">
+                    <span class="kicker"><?= number_format((float)$stats['a'], 1, ',', '') ?>/5 · <?= (int)$stats['n'] ?> avis</span>
+                    <h3>Ils portent VYRO</h3>
+                    <p>+<?= number_format($happy, 0, ',', ' ') ?> clients satisfaits</p>
+                </div>
+            </a>
+            <a href="<?= url('blog.php') ?>" class="explore-tile" data-vt>
+                <img src="<?= visual_url('cap', 'Beige') ?>" alt="" loading="lazy">
+                <div class="explore-body">
+                    <span class="kicker">Drops · Lookbooks · Guides</span>
+                    <h3>Le Journal</h3>
+                    <p>Styles, conseils et coulisses</p>
+                </div>
+            </a>
         </div>
-    </div>
-</section>
-
-<!-- INCONTOURNABLES -->
-<section class="section">
-    <div class="container">
-        <div class="section-head">
-            <div>
-                <span class="kicker">Must-have</span>
-                <h2>Les incontournables</h2>
-            </div>
-        </div>
-        <div class="product-grid reveal">
-            <?php foreach ($musts as $p) echo product_card($p); ?>
-        </div>
-    </div>
-</section>
-
-<!-- AVIS -->
-<section class="section section-alt">
-    <div class="container">
-        <div class="section-head center">
-            <div>
-                <span class="kicker">Ils portent VYRO</span>
-                <h2>+<?= number_format($happy, 0, ',', ' ') ?> clients satisfaits</h2>
-                <p class="muted"><?= stars((float)$stats['a']) ?> <b><?= number_format((float)$stats['a'], 1, ',', '') ?>/5</b> · <?= (int)$stats['n'] ?> avis vérifiés</p>
-            </div>
-        </div>
-        <div class="review-grid scroll-x reveal">
-            <?php foreach ($reviews as $r): ?>
-                <figure class="review-card">
-                    <div class="review-top">
-                        <span class="avatar"><?= e(mb_substr($r['name'], 0, 1)) ?></span>
-                        <div>
-                            <strong><?= e($r['name']) ?></strong>
-                            <small><?= e($r['city']) ?></small>
-                        </div>
-                        <?php if ($r['verified']): ?><span class="verified">✓ Achat vérifié</span><?php endif; ?>
-                    </div>
-                    <?= stars((float)$r['rating'], 'sm') ?>
-                    <blockquote>« <?= e($r['comment']) ?> »</blockquote>
-                    <?php if ($r['product_name']): ?>
-                        <figcaption><a href="<?= url('product.php?slug=' . urlencode($r['product_slug'])) ?>"><?= e($r['product_name']) ?></a></figcaption>
-                    <?php endif; ?>
-                </figure>
-            <?php endforeach; ?>
-        </div>
-    </div>
-</section>
-
-<!-- JOURNAL -->
-<?php if ($journal): ?>
-<section class="section">
-    <div class="container">
-        <div class="section-head">
-            <div>
-                <span class="kicker">Le Journal</span>
-                <h2>Drops, lookbooks & guides</h2>
-            </div>
-            <a href="<?= url('blog.php') ?>" class="link-arrow">Tout lire</a>
-        </div>
-        <div class="post-grid reveal">
-            <?php foreach ($journal as $i => $p): ?>
-                <article class="post-card" data-vt style="--i:<?= $i ?>">
-                    <a href="<?= url('article.php?slug=' . urlencode($p['slug'])) ?>" class="post-media"><img src="<?= e(post_cover($p)) ?>" alt="" loading="lazy"><span class="post-cat"><?= e($p['category']) ?></span></a>
-                    <div class="post-body">
-                        <small class="muted"><?= time_fr($p['published_at']) ?> · <?= reading_time($p['content']) ?> min</small>
-                        <h3><a href="<?= url('article.php?slug=' . urlencode($p['slug'])) ?>"><?= e($p['title']) ?></a></h3>
-                    </div>
-                </article>
-            <?php endforeach; ?>
-        </div>
-    </div>
-</section>
-<?php endif; ?>
-
-<!-- RÉSEAUX SOCIAUX -->
-<section class="section social-section">
-    <div class="container">
-        <div class="section-head center">
-            <div>
-                <span class="kicker"><?= e(INSTAGRAM_HANDLE) ?> · <?= e(TIKTOK_HANDLE) ?></span>
-                <h2>Follow the VYRO movement</h2>
-                <p class="muted">Partage ton look avec <b>#VYROSTYLE</b> pour apparaître ici.</p>
-            </div>
-        </div>
-        <div class="social-grid reveal">
-            <?php
-            $posts = [['hoodie', 'Noir', 'Instagram'], ['sneaker', 'Blanc', 'TikTok'], ['set', 'Bleu nuit', 'Instagram'],
-                ['cap', 'Beige', 'TikTok'], ['pants', 'Kaki', 'Instagram'], ['runner', 'Blanc', 'Instagram']];
-            foreach ($posts as [$v, $c, $net]): ?>
-                <a href="<?= $net === 'TikTok' ? TIKTOK_URL : INSTAGRAM_URL ?>" target="_blank" rel="noopener" class="social-tile">
-                    <img src="<?= visual_url($v, $c) ?>" alt="Post <?= $net ?> VYRO" loading="lazy">
-                    <span class="social-net"><?= $net ?></span>
-                </a>
-            <?php endforeach; ?>
-        </div>
-        <div class="social-cta">
-            <a href="<?= INSTAGRAM_URL ?>" target="_blank" rel="noopener" class="btn btn-outline btn-sm">Instagram <?= e(INSTAGRAM_HANDLE) ?></a>
-            <a href="<?= TIKTOK_URL ?>" target="_blank" rel="noopener" class="btn btn-outline btn-sm">TikTok <?= e(TIKTOK_HANDLE) ?></a>
-            <?php if (SNAPCHAT_URL): ?><a href="<?= SNAPCHAT_URL ?>" target="_blank" rel="noopener" class="btn btn-outline btn-sm">Snapchat</a><?php endif; ?>
-            <a href="https://wa.me/<?= WHATSAPP_NUMBER ?>" target="_blank" rel="noopener" class="btn btn-outline btn-sm">WhatsApp</a>
-        </div>
+        <a href="<?= url('communaute.php') ?>" class="community-strip reveal">
+            <span><b>Follow the VYRO movement</b> — <?= e(INSTAGRAM_HANDLE) ?> · <?= e(TIKTOK_HANDLE) ?></span>
+            <span class="link-arrow">Communauté</span>
+        </a>
     </div>
 </section>
 

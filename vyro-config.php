@@ -66,6 +66,8 @@ cfg('PAYMENT_NAME', 'VYRO');                 // nom affiché au client pour le t
 cfg('WAVE_API_KEY', getenv('WAVE_API_KEY') ?: '');
 cfg('WAVE_WEBHOOK_SECRET', getenv('WAVE_WEBHOOK_SECRET') ?: '');
 cfg('CARD_PAYMENT_ENABLED', false); // pas de passerelle carte branchée pour l'instant
+// Moyens de paiement proposés (wave, orange_money, mtn_momo, moov_money, cod) — Wave uniquement
+cfg('PAYMENT_METHODS', ['wave']);
 // Clé secrète du site (signatures des liens de retour). À personnaliser dans config.local.php en production.
 cfg('APP_SECRET', getenv('APP_SECRET') ?: hash('sha256', __DIR__ . DB_NAME . DB_PASS . 'vyro'));
 

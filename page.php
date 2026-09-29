@@ -17,7 +17,7 @@ $pages = [
 <ul>
 <li><b>Qualité premium</b> — des grammages élevés et des coutures renforcées.</li>
 <li><b>Livraison rapide</b> — 24–48h à Abidjan, partout en Côte d'Ivoire.</li>
-<li><b>Paiement local</b> — Wave, Orange Money, MTN, Moov ou à la livraison.</li>
+<li><b>Paiement simple</b> — 100 % Wave, en quelques secondes.</li>
 <li><b>Communauté</b> — le VYRO movement, c'est vous. Partagez vos looks avec #VYROSTYLE.</li>
 </ul>
 HTML],
@@ -28,9 +28,9 @@ HTML],
 <h2>2. Produits et prix</h2>
 <p>Les produits sont décrits avec la plus grande exactitude possible. Les prix sont indiqués en francs CFA (FCFA), toutes taxes comprises, hors frais de livraison. VYRO se réserve le droit de modifier ses prix à tout moment ; le prix appliqué est celui en vigueur au moment de la commande.</p>
 <h2>3. Commande</h2>
-<p>La commande est validée après confirmation du paiement ou, pour le paiement à la livraison, après validation du formulaire de commande. Un numéro de commande est attribué et communiqué au Client.</p>
+<p>La commande est validée après confirmation du paiement Wave. Un numéro de commande est attribué et communiqué au Client.</p>
 <h2>4. Paiement</h2>
-<p>Moyens acceptés : Wave, Orange Money, MTN MoMo, Moov Money et paiement à la livraison. Le paiement Wave en ligne est traité par Wave ; VYRO ne conserve aucune donnée bancaire.</p>
+<p>Moyen de paiement accepté : Wave. Le paiement est traité par Wave ; VYRO ne conserve aucune donnée bancaire.</p>
 <h2>5. Livraison</h2>
 <p>Voir la <a href="page.php?p=livraison">politique de livraison</a>.</p>
 <h2>6. Retours</h2>

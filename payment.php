@@ -2,7 +2,7 @@
 /**
  * VYRO — Paiement de la commande.
  *  - Wave + clé API configurée : paiement instantané via Wave Checkout (voir includes/wave.php).
- *  - Sinon (Wave sans API, Orange Money, MTN, Moov) : transfert vers PAYMENT_PHONE puis le client
+ *  - Sinon : transfert Wave vers PAYMENT_PHONE puis le client
  *    déclare son paiement (ID de transaction) ; l'admin vérifie et marque la commande « Payée ».
  */
 require __DIR__ . '/vyro-config.php';
@@ -137,14 +137,6 @@ require __DIR__ . '/includes/header.php';
                     <button type="button" class="copy-line" data-copy="<?= e($order['number']) ?>"><span><?= e($order['number']) ?></span><small>Copier</small></button>
                 </div></li>
             </ol>
-            <?php if ($order['payment_method'] === 'orange_money'): ?>
-                <p class="muted small">Astuce Orange Money : compose <b>#144#</b> puis « Transfert d’argent ».</p>
-            <?php elseif ($order['payment_method'] === 'mtn_momo'): ?>
-                <p class="muted small">Astuce MTN MoMo : compose <b>*133#</b> puis « Transfert d’argent ».</p>
-            <?php elseif ($order['payment_method'] === 'moov_money'): ?>
-                <p class="muted small">Astuce Moov Money : compose <b>*155#</b> puis « Transfert ».</p>
-            <?php endif; ?>
-
             <form method="post" class="form pay-declare">
                 <?= csrf_field() ?>
                 <input type="hidden" name="action" value="declare">
@@ -161,16 +153,18 @@ require __DIR__ . '/includes/header.php';
             </form>
         <?php endif; ?>
 
-        <details class="pay-alt">
-            <summary>Changer de moyen de paiement</summary>
-            <form method="post" class="pay-switch">
-                <?= csrf_field() ?>
-                <input type="hidden" name="action" value="change_method">
-                <?php foreach ($methods as $k => $m): if ($k === $order['payment_method']) continue; ?>
-                    <button name="method" value="<?= $k ?>" class="btn btn-outline btn-sm"><i class="pay-dot" style="--pc:<?= $m['color'] ?>"></i> <?= e($m['label']) ?></button>
-                <?php endforeach; ?>
-            </form>
-        </details>
+        <?php if (count($methods) > 1): ?>
+            <details class="pay-alt">
+                <summary>Changer de moyen de paiement</summary>
+                <form method="post" class="pay-switch">
+                    <?= csrf_field() ?>
+                    <input type="hidden" name="action" value="change_method">
+                    <?php foreach ($methods as $k => $m): if ($k === $order['payment_method']) continue; ?>
+                        <button name="method" value="<?= $k ?>" class="btn btn-outline btn-sm"><i class="pay-dot" style="--pc:<?= $m['color'] ?>"></i> <?= e($m['label']) ?></button>
+                    <?php endforeach; ?>
+                </form>
+            </details>
+        <?php endif; ?>
 
         <form method="post" onsubmit="return confirm('Annuler la commande ?')">
             <?= csrf_field() ?>

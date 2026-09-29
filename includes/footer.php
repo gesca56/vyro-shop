@@ -17,7 +17,7 @@
 <section class="trust-strip">
     <div class="container trust-grid">
         <div><strong>Livraison rapide</strong><span>24–48h à Abidjan · 2–5 jours en région</span></div>
-        <div><strong>Paiement sécurisé</strong><span>Wave · Orange · MTN · Moov · Livraison</span></div>
+        <div><strong>Paiement sécurisé</strong><span>Paiement par Wave, en quelques secondes</span></div>
         <div><strong>Retours 7 jours</strong><span>Échange ou remboursement</span></div>
         <div><strong>Service client</strong><span>WhatsApp 7j/7</span></div>
     </div>
@@ -58,6 +58,9 @@
             <h4>VYRO</h4>
             <a href="<?= url('page.php?p=a-propos') ?>">À propos</a>
             <a href="<?= url('blog.php') ?>">Journal</a>
+            <a href="<?= url('collections.php') ?>">Collections</a>
+            <a href="<?= url('avis.php') ?>">Avis clients</a>
+            <a href="<?= url('communaute.php') ?>">Communauté</a>
             <a href="<?= url('page.php?p=cgv') ?>">CGV</a>
             <a href="<?= url('page.php?p=confidentialite') ?>">Confidentialité</a>
             <a href="<?= url('page.php?p=mentions-legales') ?>">Mentions légales</a>
@@ -67,9 +70,6 @@
     <div class="container footer-bottom">
         <span>© <?= date('Y') ?> VYRO — Clothing · Sneakers · Accessories</span>
         <div class="pay-logos">
-            <span style="--pc:#FF7900">Orange Money</span>
-            <span style="--pc:#FFCC00">MTN MoMo</span>
-            <span style="--pc:#3B8BD9">Moov</span>
             <span style="--pc:#1DC8FF">Wave</span>
             <?php if (CARD_PAYMENT_ENABLED): ?><span style="--pc:#fff">Visa / MC</span><?php endif; ?>
         </div>

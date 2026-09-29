@@ -3,7 +3,7 @@
    ========================================================= */
 
 /* ---------- Transitions de page (View Transitions API) ---------- */
-@view-transition { navigation: auto; }
+@view-transition { navigation: none; } /* transitions de page : rideau (pages.css) */
 .site-header { view-transition-name: site-header; transition: transform .3s ease, box-shadow .3s; }
 .promo-bar { view-transition-name: promo-bar; }
 .vt-title { view-transition-name: page-title; }
@@ -21,7 +21,7 @@
 @keyframes vtIn { from { opacity: 0; transform: translateY(14px); } }
 
 /* Repli sans View Transitions : fondu d'entrée de page */
-html.js:not(.vt) main { animation: pageIn .45s cubic-bezier(.2, .7, .2, 1) both; }
+html.js main { animation: pageIn .6s .25s cubic-bezier(.2, .7, .2, 1) both; }
 @keyframes pageIn { from { opacity: 0; transform: translateY(10px); } }
 
 /* Barre de progression de navigation */
