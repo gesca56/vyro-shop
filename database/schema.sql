@@ -10,6 +10,7 @@ CREATE TABLE users (
     first_name VARCHAR(80) NOT NULL,
     last_name VARCHAR(80) NOT NULL,
     email VARCHAR(190) NOT NULL UNIQUE,
+    username VARCHAR(60) NULL UNIQUE,
     phone VARCHAR(30) NOT NULL,
     password VARCHAR(255) NOT NULL,
     is_admin TINYINT(1) NOT NULL DEFAULT 0,

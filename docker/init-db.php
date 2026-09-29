@@ -52,6 +52,11 @@ $admin = $pdo->query('SELECT id, email, password FROM users WHERE is_admin = 1 O
 if ($admin) {
     $email = trim((string)getenv('ADMIN_EMAIL'));
     $pass = (string)getenv('ADMIN_PASSWORD');
+    $username = trim((string)getenv('ADMIN_USERNAME'));
+    if ($username !== '') {
+        $pdo->prepare('UPDATE users SET username = ? WHERE id = ?')->execute([$username, $admin['id']]);
+        echo "[VYRO] Nom d'utilisateur admin : $username\n";
+    }
     if ($pass !== '') {
         $pdo->prepare('UPDATE users SET password = ?, email = COALESCE(NULLIF(?, \'\'), email) WHERE id = ?')
             ->execute([password_hash($pass, PASSWORD_DEFAULT), $email, $admin['id']]);

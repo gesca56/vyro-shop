@@ -30,6 +30,10 @@ if (!db()->query("SHOW COLUMNS FROM orders LIKE 'payment_session'")->fetchColumn
     db()->exec('ALTER TABLE orders ADD payment_session VARCHAR(80) NULL AFTER payment_ref');
     $out[] = 'Colonne orders.payment_session ajoutée (Wave).';
 }
+if (!db()->query("SHOW COLUMNS FROM users LIKE 'username'")->fetchColumn()) {
+    db()->exec('ALTER TABLE users ADD username VARCHAR(60) NULL UNIQUE AFTER email');
+    $out[] = 'Colonne users.username ajoutée (connexion admin par nom d’utilisateur).';
+}
 $out[] = 'Mise à jour terminée.';
 
 echo PHP_SAPI === 'cli' ? implode(PHP_EOL, $out) . PHP_EOL : '<pre>' . e(implode("\n", $out)) . '</pre><a href="admin/">Administration</a>';
