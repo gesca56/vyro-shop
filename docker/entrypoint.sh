@@ -3,6 +3,13 @@
 set -e
 PORT="${PORT:-10000}"
 
+# « none » ou « - » = pas de base externe (Render peut exiger une valeur)
+case "$DB_HOST" in none|NONE|-|" ") DB_HOST="" ;; esac
+for v in DB_USER DB_PASS WAVE_API_KEY WAVE_WEBHOOK_SECRET; do
+    eval "val=\${$v:-}"
+    case "$val" in none|NONE|-) export "$v=" ;; esac
+done
+
 if [ -z "$DB_HOST" ]; then
     # Pas de base externe : MariaDB intégrée (démo — les données repartent de zéro à chaque redémarrage)
     echo "[VYRO] Aucune base externe (DB_HOST vide) : MariaDB intégrée, mode DÉMO."
